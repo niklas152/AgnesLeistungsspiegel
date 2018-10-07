@@ -28,9 +28,9 @@ class UI {
             System.out.print(msg + (newLine ? "\n" : ""));
         } else {
             console.writer().print(msg + (newLine ? "\n" : ""));
+            console.flush();
         }
     }
-
 
     String getLine(String query) {
         return getLine(query, null, false);
