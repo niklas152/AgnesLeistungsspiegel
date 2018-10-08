@@ -111,64 +111,11 @@ public class AgnesAdapter {
     }
 
     String getRawLeistungsspiegel(String url, String cookie) {
-        String leistungspiegel = GetPage(url, cookie);
-
-        String[] leistungsspiegelTable =
-                leistungspiegel.substring(
-                        leistungspiegel.indexOf("<table"),
-                        leistungspiegel.indexOf("</table>") + 8
-                ).split("\n");
-
-        StringBuilder nicerLS = new StringBuilder();
-
-        for (int i = 0; i < leistungsspiegelTable.length; ++i) {
-            // get current line, but without unneccassary whitspace
-            String newLine = leistungsspiegelTable[i].trim();
-
-            // remove tablerow start tags
-            newLine = newLine.replace("<tr>", "");
-            // add new lines instead of tablerow end tags
-            newLine = newLine.replace("</tr>", "\n");
-
-            // remove blank lines
-            if (!newLine.isEmpty()) {
-                nicerLS.append(newLine);
-            }
-        }
-
-        leistungspiegel = nicerLS.toString();
-
-        // remove html table tags, insert custom seperators (--|--) instead if in middle of row
-        leistungspiegel = leistungspiegel.replaceAll("<\\/td><td[a-zA-Z0-9 _=:;\\\"\\-]*>", " --|-- ");
-        leistungspiegel = leistungspiegel.replaceAll("<\\/th><th[a-zA-Z0-9 _=:;\\\"\\-]*>", " --|-- ");
-
-        // remove them from start..
-        leistungspiegel = leistungspiegel.replaceAll("<td[a-zA-Z0-9 _=:;\\\"\\-]*>", "");
-        leistungspiegel = leistungspiegel.replaceAll("<th[a-zA-Z0-9 _=:;\\\"\\-]*>", "");
-        // ..and end of line
-        leistungspiegel = leistungspiegel.replaceAll("<\\/td>", "");
-        leistungspiegel = leistungspiegel.replaceAll("<\\/th>", "");
-
-        // remove italics tags in header line
-        leistungspiegel = leistungspiegel.replaceAll("<i>Abschluss", "Abschluss");
-        leistungspiegel = leistungspiegel.replaceAll("<i>", "--|-- ");
-        leistungspiegel = leistungspiegel.replaceAll("<\\/i>", "");
-
-        // replace weird placeholders with ours
-        leistungspiegel = leistungspiegel.replaceAll("&nbsp;|&nbsp;", " --|-- ");
-
-        // add line breaks after each table row
-        leistungspiegel = leistungspiegel.replace("</tr>", "\n");
-
-        // now, re-trim and also remove the first and the last two lines since they are irrelevant to parsing
-        nicerLS = new StringBuilder();
-        leistungsspiegelTable = leistungspiegel.split("\n");
-        
-        for (int i = 1; i < leistungsspiegelTable.length - 2; ++i) {
-            nicerLS.append(leistungsspiegelTable[i].trim() + "\n");
-        }
-
-        return nicerLS.toString();
+        String leistungsspiegelPage = GetPage(url, cookie);
+        return leistungsspiegelPage.substring(
+                leistungsspiegelPage.indexOf("<table"),
+                leistungsspiegelPage.indexOf("</table>") + 8
+        );
     }
 
     private String GetLineFromResult(String url, String lineMark, String cookie) {

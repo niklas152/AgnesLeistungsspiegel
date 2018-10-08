@@ -29,7 +29,6 @@ public class Main {
             String rawLeistungsspiegel = agnes.getRawLeistungsspiegel(link, result.cookie);
 
             ui.Log("Parsing raw Leistungsspiegel..");
-            ui.Log("\n\n" + rawLeistungsspiegel);
             Leistungsspiegel ls = new Leistungsspiegel(rawLeistungsspiegel);
 
             ui.Log("Done");
